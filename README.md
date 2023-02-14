@@ -1,6 +1,6 @@
 # _**codeex quiz - frontend**_
 
-codeex quiz platform backend system using `VueJS` and `TypeScript`.
+codeex quiz platform frontend system using `VueJS` and `TypeScript`.
 
 ## _**installation**_
 
