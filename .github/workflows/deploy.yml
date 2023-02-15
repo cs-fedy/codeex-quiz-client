@@ -35,4 +35,6 @@ jobs:
             cd codeex-quiz-client
             git fetch origin main
       - name: Run the app
-        run: yarn && yarn run dev
+        run: |
+          docker build -t codeex-quiz-client .
+          docker run -p 5173:5173 codeex-quiz-client
