@@ -29,7 +29,7 @@ jobs:
 
             cd codeex-quiz
             if [ ! -d codeex-quiz-client ]; then
-              git clone git clone https://github.com/cs-fedy/codeex-quiz-client.git
+              git clone https://github.com/cs-fedy/codeex-quiz-client.git
             fi
 
             cd codeex-quiz-client
