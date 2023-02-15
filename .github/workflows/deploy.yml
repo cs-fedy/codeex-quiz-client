@@ -35,6 +35,6 @@ jobs:
             cd codeex-quiz-client
             git fetch origin main
       - name: Run the app
-        script: |
+        run: |
           cd codeex-quiz/codeex-quiz-client
           yarn && yarn run dev
