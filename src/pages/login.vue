@@ -3,7 +3,7 @@ import { useForm } from 'vee-validate'
 import { toast } from 'vue3-toastify'
 import CustomInput from '../components/custom-input.vue'
 import ErrorAlert from '../components/error-alert.vue'
-import PrimaryBox from '../components/primary-box.vue'
+import submitButton from '../components/submit-button.vue'
 import { login } from '../api/auth'
 import { useRouter } from 'vue-router'
 
@@ -13,7 +13,7 @@ type LoginForm = {
 }
 
 const router = useRouter()
-const { values, errors, setErrors, handleSubmit, resetForm } = useForm<LoginForm>()
+const { values, errors, setErrors, handleSubmit, resetForm, isSubmitting } = useForm<LoginForm>()
 
 const logUser = handleSubmit(async (state: LoginForm) => {
   const loginPayload = await login(state)
@@ -28,7 +28,7 @@ const logUser = handleSubmit(async (state: LoginForm) => {
   }
 
   resetForm()
-  router.replace('/')
+  router.replace('/profile')
 })
 </script>
 
@@ -55,9 +55,7 @@ const logUser = handleSubmit(async (state: LoginForm) => {
           type="password"
           v-model:value="values.password"
         />
-        <button type="submit">
-          <primary-box>sign in</primary-box>
-        </button>
+        <submit-button :is-submitting="isSubmitting"> get started </submit-button>
       </form>
       <div class="mt-8 flex items-center gap-2">
         <span class="text-sm font-normal leading-5 text-gray-600">Don't have an account?</span>

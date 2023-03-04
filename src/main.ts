@@ -1,23 +1,19 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import { createRouter, createWebHistory, useRouter } from 'vue-router'
-import Home from './pages/home.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import Login from './pages/login.vue'
 import Register from './pages/register.vue'
+import Settings from './pages/settings.vue'
+import Profile from './pages/profile.vue'
 import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify'
 import { createPinia } from 'pinia'
 import { useAuthStore, AuthStatus } from './store/auth'
+import { Roles } from './utils/constants'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {
-      path: '/',
-      component: Home,
-      name: 'Home',
-      meta: { public: true },
-    },
     {
       path: '/login',
       component: Login,
@@ -29,6 +25,18 @@ const router = createRouter({
       component: Register,
       name: 'Register',
       meta: { requiresLoggedIn: false },
+    },
+    {
+      path: '/settings',
+      component: Settings,
+      name: 'Settings',
+      meta: { requiresLoggedIn: true, roles: [Roles.self] },
+    },
+    {
+      path: '/profile',
+      component: Profile,
+      name: 'Profile',
+      meta: { requiresLoggedIn: true, roles: [Roles.self] },
     },
   ],
 })
@@ -45,7 +53,6 @@ router.beforeEach(async (to, from, next) => {
   const { auth, handleRefresh } = useAuthStore()
   await handleRefresh()
 
-  if (to.meta.public) return next()
   if (to.meta.requiresLoggedIn) {
     if (auth.status === AuthStatus.loggedOut) return next('/login')
     const requiredRoles = to.meta.roles as Array<string>
@@ -55,10 +62,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (!to.meta.requiresLoggedIn) {
-    if (auth.status === AuthStatus.loggedIn) {
-      return next(from ?? '/home')
-    }
-
+    if (auth.status === AuthStatus.loggedIn) return next('/profile')
     return next()
   }
 })

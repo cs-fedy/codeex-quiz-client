@@ -82,3 +82,23 @@ export async function refreshUser(): Promise<RefreshResult> {
     throw new Error(error as string)
   }
 }
+
+type InternalError = {
+  code: 'internal_server_error'
+  message: string
+}
+
+type LogoutPayload = { message: string }
+type LogoutResult = Either<InternalError, LogoutPayload>
+export async function logout(): Promise<LogoutResult> {
+  try {
+    const { data } = await instance.post<LogoutPayload>('/auth/logout')
+    return Right.create(data)
+  } catch (error) {
+    if (isAxiosError<InternalError>(error)) {
+      if (error.response) return Left.create(error.response?.data)
+    }
+
+    throw new Error(error as string)
+  }
+}

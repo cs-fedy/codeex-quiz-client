@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import CustomInput from '../components/custom-input.vue'
-import PrimaryBox from '../components/primary-box.vue'
+import submitButton from '../components/submit-button.vue'
 import { register } from '../api/auth'
 import { ONE_SECOND, userRegisteredMsg } from '../utils/constants'
 import { useForm } from 'vee-validate'
@@ -16,7 +16,7 @@ type RegisterForm = {
   password: string
 }
 
-const { values, errors, setErrors, handleSubmit, resetForm } = useForm<RegisterForm>()
+const { values, errors, setErrors, handleSubmit, resetForm, isSubmitting } = useForm<RegisterForm>()
 
 const registerUser = handleSubmit(async (state: RegisterForm) => {
   const createdUser = await register(state)
@@ -76,9 +76,7 @@ const registerUser = handleSubmit(async (state: RegisterForm) => {
           type="password"
           v-model:value="values.password"
         />
-        <button type="submit">
-          <primary-box>get started</primary-box>
-        </button>
+        <submit-button :is-submitting="isSubmitting"> get started </submit-button>
       </form>
       <div class="mt-8 flex items-center gap-2">
         <span class="text-sm font-normal leading-5 text-gray-600">Already have an account?</span>
